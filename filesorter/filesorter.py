@@ -2,12 +2,16 @@
 
 import os
 import shutil
+import copy
 
 def process_paths(path_, folder_):
 	alteredpath = path_.split("/")
+	path_to_avoid = copy.deepcopy(alteredpath)
+	path_to_avoid.insert(4, "supervised-and-unsupervised-learning")
+	path_to_avoid = "/".join(path_to_avoid)
 	alteredpath.insert(4, folder_)
 	alteredpath = "/".join(alteredpath)
-	return path_, alteredpath
+	return path_, alteredpath, path_to_avoid
 
 
 folder_name = input("What is the name of the folder you are moving to? > ")
@@ -22,9 +26,12 @@ if os.path.isdir(folder_path):
 		if os.path.isdir(old_path):
 			print(f"Skipped {old_path}")
 		else:
-			old_path, new_path = process_paths(old_path, folder_name)
-			shutil.move(old_path, new_path)
-			number_of_files += 1
+			old_path, new_path, used_path = process_paths(old_path, folder_name)
+			if os.path.exists(used_path):
+				print(f"Skipped {used_path}")
+			else:
+				shutil.move(old_path, new_path)
+				number_of_files += 1
 	print(f"Moved {number_of_files} files successfully.")
 else:
 	print("That is not a valid directory. Operation failed.")
