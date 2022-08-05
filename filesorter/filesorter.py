@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # This Linux shell program transfers files to folders inside a user's local repository.
+# This program makes the assumption that you would like to move ALL files to one folder.
 
 import os
 import shutil
